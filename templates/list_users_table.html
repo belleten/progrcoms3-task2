@@ -1,0 +1,23 @@
+<html>
+ <head>
+  <title>Users list</title>
+ </head>
+ <body>
+  <h2>Users list</h2>
+  <table border="2">
+   <tr>
+    <th>username</th>
+    <th>fullname</th>
+    <th>email</th>
+    <th>password</th>
+   </tr>
+    {% for row in table_users %}
+     <tr>
+     {% for cell in row %}
+      <td>{{cell}}</td>
+     {% endfor %}
+     </tr>
+    {% endfor %
+  </table>
+ </body>
+</html> 
