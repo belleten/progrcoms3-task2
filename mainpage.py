@@ -1,3 +1,4 @@
+from __future__ import print_function 
 import sqlite3
 from flask import render_template
 from flask import Flask, redirect, url_for, request
@@ -21,6 +22,20 @@ def get_users():
 	conn.close()
 	return data
 
+def check_password(username_login,password_login):
+	# agafar dades (password) de la BD pwer (WHERE) usuari usr
+	conn = sqlite3.connect('userdatabase.db')
+	cursor = conn.execute("SELECT password from login WHERE username = ?",(username_login,))
+	db_password =  cursor.fetchone()
+	print(db_password)
+	if db_password is None:
+		return False
+	else:
+		db_password = db_password[0]
+	if password_login == db_password:
+		return True
+	else:
+		return False 
 
 @app.route('/')
 def main():
@@ -58,13 +73,15 @@ def login_user():
 	if request.method == 'GET':
 		return render_template('login_page.html')
 	elif request.method == 'POST':
-		username = request.form.get('username')
-		password = request.form.get('password')
-		if get_users():
-			return "WELCOME BACK!!!!!"
+		username_login = request.form.get('username')
+		password_login = request.form.get('password')
+		if check_password(username_login,password_login):
+			#return "WELCOME BACK!!!!!"
 			#return redirect(url_for('ret_main'))
+			return render_template('wel_back.html')
 		else:
-			return "ERROR --> INVALID username OR password"
+			#return "ERROR --> INVALID username OR password"
+			return render_template('invalid_log.html')
 
 #@app.route('/back', methods=['GET','POST'])
 #def ret_main():
